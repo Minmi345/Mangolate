@@ -1,0 +1,29 @@
+{
+  "name": "mangolate",
+  "version": "1.0.0",
+  "description": "npm's used:",
+  "homepage": "https://github.com/Minmi345/Mangolate#readme",
+  "bugs": {
+    "url": "https://github.com/Minmi345/Mangolate/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Minmi345/Mangolate.git"
+  },
+  "license": "ISC",
+  "author": "Minmi345",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && npm run dev",
+    "all": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
