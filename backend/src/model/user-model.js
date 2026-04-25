@@ -1,5 +1,5 @@
 import { dbClient } from './connect.js'
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const userSchema = new mongoose.Schema({
   name: { 
@@ -15,18 +15,18 @@ const userSchema = new mongoose.Schema({
     type: [String], // Array of strings
     default: [] 
   }
-});
+})
 
 // Export the Model
-export const User = mongoose.model('User', userSchema, 'Users');
+export const User = mongoose.model('User', userSchema, 'Users')
 const userCollection = dbClient.db('Mangolate').collection('Users')
 
 export const findUserByName = async (name) => {
-  return await User.findOne({ name });
+  return await User.findOne({ name })
 }
 
 export const getUsers = async () => {
-  return await User.find();
+  return await User.find()
 }
 
 export const addUser = async (json) =>{
@@ -43,8 +43,8 @@ export const updateRolesByName = async (name, newRoles) => {
     { name: name },
     { $set: { roles: newRoles } }, // $set ensures only this field changes
     { new: true, runValidators: true } // 'new: true' returns the updated document
-  );
-};
+  )
+}
 
 export const retrieveUsersByRoles = async (roles) =>{
   //return await User.find({ roles: { $in: roles } });

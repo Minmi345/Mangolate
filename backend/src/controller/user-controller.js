@@ -1,8 +1,8 @@
 import { findUserByName, addUser } from '../model/user-model.js'
-import bcrypt from 'bcryptjs';
-import { User } from '../model/user-model.js';
-import mongoose, { Mongoose } from 'mongoose';
-import { getUsers as getUsersFromDb, updateRolesByName, removeUser, retrieveUsersByRoles } from '../model/user-model.js';
+import bcrypt from 'bcryptjs'
+import { User } from '../model/user-model.js'
+import mongoose, { Mongoose } from 'mongoose'
+import { getUsers as getUsersFromDb, updateRolesByName, removeUser, retrieveUsersByRoles } from '../model/user-model.js'
 
 export const getUser = async (req, res) => {
   try {
@@ -15,7 +15,7 @@ export const getUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
-};
+}
 
 export const getUsers = async (req, res) => {
   try {
@@ -55,7 +55,7 @@ export const deleteUser = async (req, res) => {
     console.log("Attempting to delete:", name)
     const result = await removeUser(name)
     if (result.deletedCount === 0) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" })
     }
 
     res.json({ message: "Successfully deleted" })
@@ -67,15 +67,15 @@ export const deleteUser = async (req, res) => {
 
 export const patchUserRoles = async (req, res) => {
   try {
-    const { username } = req.params;
-    const { roles } = req.body;
+    const { username } = req.params
+    const { roles } = req.body
 
     // Validation: check if roles is actually an array
     if (!Array.isArray(roles)) {
-      return res.status(400).json({ message: "Roles must be an array of strings" });
+      return res.status(400).json({ message: "Roles must be an array of strings" })
     }
 
-    const updatedUser = await updateRolesByName(username, roles);
+    const updatedUser = await updateRolesByName(username, roles)
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" })
@@ -99,7 +99,7 @@ export const getUsersByRoles = async (req, res) => {
     }
 
     const users = await retrieveUsersByRoles(roles)
-      console.log("Im here!")
+    console.log("Im here!")
     
     if (!users){
       return res.status(404).json({ message: "Users with this specific role were not found" })
