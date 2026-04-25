@@ -6,7 +6,9 @@ import mongoose from 'mongoose'
 const taskSchema = new mongoose.Schema({
   workers: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    default: [],
+    required: false
   }],
   deadline: {
     type: Date,
@@ -22,8 +24,7 @@ const taskSchema = new mongoose.Schema({
 const chapterSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    unique: true // Prevents duplicate titles
+    required: true
   },
   isPublished: {
     type: Boolean,
@@ -33,12 +34,13 @@ const chapterSchema = new mongoose.Schema({
     type: Date,
     min: '2025-01-20',
   },
-  TitleId: {
+  titleId: {
     type: mongoose.Schema.Types.ObjectId, ref: 'Title',
     required: true
   },
-  Tasks: {
-    type: taskSchema
+  tasks: {
+    type: Map,
+    of: taskSchema
   },
 })
 
@@ -46,20 +48,56 @@ const chapterSchema = new mongoose.Schema({
 // delete 1 chapter ✅
 //retrieve 1 chapter ✅
 // retrieve all chapters that user has with isPublished = false
-//change 1 role
-//change from 1 status to another
+//change 1 role (remove worker)✅
+//change 1 role (add worker)✅
+//change from 1 status to another✅
 
 // Export the Model
 export const Chapter = mongoose.model('Chapter', chapterSchema, 'Chapters')
 
 export const addChapter = async (json) =>{
-  return await Chapter.save(json)
+  const  newChapter = new Chapter(json)
+  return newChapter.save()
 }
 
 export const findChapter = async(id) =>{
   return await Chapter.findOne({_id:id},'name')
 }
 
-export const removeChaper = async(id) =>{
+//chapter 1
+// clean : Vika
+// type : Htoss
+// translate: Htoss
+export const findChaptersByUser = async(userId) =>{
+  const objectId = new mongoose.Types.ObjectId(userId);
+  return await Chapter.find({"tasks.$*.workers": {$in:objectId}},'name tasks')
+}
+
+export const removeChapter = async(id) =>{
   return await Chapter.deleteOne({_id: id})
+}
+
+export const removeWorkerFromTask = async(chapterId, role, userId) =>{
+  const updateKey = `tasks.${role}.workers` //dynamic key for the map
+  return await Chapter.findByIdAndUpdate(
+    chapterId,
+    { $pull: { [updateKey]: userId } }, 
+    { new: true }
+  )
+}
+export const addWorkerToTask = async(chapterId, role, userId) =>{
+  const updateKey = `tasks.${role}.workers`
+  return await Chapter.findByIdAndUpdate(
+    chapterId,
+    { $addToSet: { [updateKey]: userId } }, 
+    { new: true }
+  ).populate('tasks.$*.workers', 'name') //MongoDB's "join"
+}
+export const editRoleStatus = async(chapterId, role, status) =>{
+  const updateKey = `tasks.${role}.status`
+  return await Chapter.findByIdAndUpdate(
+    chapterId,
+    { $set: { [updateKey]: status } }, 
+    { new: true })
+
 }

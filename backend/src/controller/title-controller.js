@@ -1,5 +1,3 @@
-import { findUserByName, addUser } from '../model/user-model.js'
-import { User } from '../model/user-model.js'
 import { Title, addTitle, findTitle, removeTitle } from '../model/title-model.js'
 
 // get 1 title ✅

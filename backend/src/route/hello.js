@@ -11,7 +11,6 @@ router.get('/hello', (req, res) => {
   res.send('Hello World!')
 })
 
-
 router.get('/api/hello', (req, res) => {
   const json = {
     "message": "Hello World!",
