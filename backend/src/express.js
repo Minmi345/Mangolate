@@ -5,6 +5,7 @@ import logger from 'morgan'
 import cors from 'cors'
 
 export const app = express()
+app.use(express.json());
 
 //from Deema lecture
 app.use(cors())
