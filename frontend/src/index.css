@@ -36,10 +36,13 @@ body {
 
 #root {
   width: 100%;
-  margin: 0 auto;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas:
+    "sidebar content";
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 80px 1vh; /* Header height is 80px, rest is content */
+  height: 100vh;
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
@@ -54,20 +57,24 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
+
   @media (max-width: 1024px) {
     font-size: 36px;
     margin: 20px 0;
   }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
+
   @media (max-width: 1024px) {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }

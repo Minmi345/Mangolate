@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import HomePage, { Sidebar } from './pages/sidebar'
 import './pages/sidebar.css'
-import './App.css'
+// import './App.css'
 
 function App() {
   return (
     <>
       <Sidebar/>
-      waaa
     </>
   )
 }

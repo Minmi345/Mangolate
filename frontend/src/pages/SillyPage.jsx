@@ -1,11 +1,14 @@
 export function SillyPage() {
     return (
         <>
+        <main className="content">
+
             <Yipee />
             <ToDoList />
             <Paragraph text={"This is how to reuse components with different things in it"}/>
             <Paragraph text={"Same component, different text"}/>
             <svg className="icon" role="presentation" aria-hidden="true"></svg>
+        </main>
         </>
     )
 }

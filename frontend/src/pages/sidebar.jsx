@@ -1,6 +1,14 @@
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.svg'
+import useful from '../assets/tasks/useful.svg'
+import favourite from '../assets/tasks/favorite.svg'
+import projects from '../assets/tasks/projects.svg'
+import profile from '../assets/profile.svg'
+import deadline from '../assets/tasks/deadline.svg'
+import warning from '../assets/tasks/warning.svg'
+// import deadline from '../assets/tasks/.svg'
 import './sidebar.css'
-import { SillyPage } from './SillyPage';
+import { BrowserRouter, Routes, Route, NavLink, Link } from 'react-router-dom'
+import { SillyPage } from './SillyPage'
 
 export default function HomePage() {
     return (
@@ -8,22 +16,37 @@ export default function HomePage() {
             <div class="container">
                 <Sidebar />
 
-                <main class="content">
-                    <h1>Main Content Area</h1>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam ipsa magnam error ducimus sit, eveniet voluptates, amet aspernatur assumenda deserunt alias repellat architecto eius sapiente nisi. Explicabo blanditiis optio dolores.
-                </main>
             </div>
         </>)
 }
 
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+export function Icon({src}) {
+    return (
+        <>
+        <img src={src} className='icon' width='20px'></img>
+        </>)
+}
+
 export function Sidebar() {
     return (
         <>
-            <sidebar class="sidebar">
-                <Logo />
+                <BrowserRouter>
+                    <nav className="sidebar">
+                        <Logo />
+                        <NavLink className="Links" to="/Table"><Icon src={projects}/>See some cool table</NavLink> {" "}
+                        <NavLink className="Links" to="/"> <Icon src={deadline}/>Home</NavLink> {" "}
+                        <NavLink className="Links" to="/Useful"><Icon src={useful}/>Useful info</NavLink> {" "}
+                        <NavLink className="Links" to="/SignUpPage"><Icon src={profile}/>Sign Up/ Log In Page</NavLink> {" "}
+                        <NavLink className="Links" to="/liam"><Icon src={favourite}/>Liam</NavLink> {" "}
+                        <NavLink className="Links" to="/sillyPage"><Icon src={warning}/>Silly Page</NavLink> {" "}
 
-            </sidebar>
+                    </nav>
+                    <Routes>
+                        <Route path="/liam" element={<p>Liam's secret page!!!!!!!! Love you good luck xx</p>} />
+                        <Route path="/sillyPage" element={<SillyPage />} />
+
+                    </Routes>
+                </BrowserRouter>
         </>
     )
 }
@@ -32,38 +55,6 @@ export function Logo() {
     return (
         <>
             <img src={logo} alt="logo" width="150px" class="logo"></img>
-
-            <BrowserRouter>
-                <nav>
-                    <Link class="Links" to="/">Home</Link> {" "}
-                    <Link class="Links" to="/liam">Liam</Link> {" "}
-                    <Link class="Links" to="/sillyPage">Silly Page</Link> {" "}
-                    <Link class="Links" to="/SignUpPage">Sign Up/ Log In Page</Link> {" "}
-                    <Link class="Links" to="/Table">See some cool table</Link> {" "}
-                    <Link class="Links" to="/contact">Contact</Link>
-
-                </nav>
-                <Routes>
-
-                    <Route path="/liam" element={<p>Liam's secret page!!!!!!!! Love you good luck xx</p>} />
-                    <Route path="/sillyPage" element={<SillyPage />} />
-
-                </Routes>
-            </BrowserRouter>
         </>
     )
-}
-
-{/* Routes */ }
-<Routes>
-    <Route path="/" element={<HomePage />} />
-    <Route path="/sillyPage" element={<SillyPage />} />
-    <Route path="/contact" element={<p>this is contact page :)</p>} />
-</Routes>
-
-function SidebarLinks({ text, link }) {
-    return (
-        <>
-            <a href={link} class="Links">{text}</a>
-        </>)
 }
