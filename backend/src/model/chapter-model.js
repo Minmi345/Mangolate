@@ -69,8 +69,33 @@ export const findChapter = async(id) =>{
 // type : Htoss
 // translate: Htoss
 export const findChaptersByUser = async(userId) =>{
-  const objectId = new mongoose.Types.ObjectId(userId);
-  return await Chapter.find({"tasks.$*.workers": {$in:objectId}},'name tasks')
+  const objectId = new mongoose.Types.ObjectId(userId)
+  // return await Chapter.find({"tasks.$*.workers": {$in:objectId}},'name tasks')
+  return await Chapter.find({
+    //   "tasks": {
+    //     $elemMatch : { "workers": objectId}
+    //   }
+    //  }, 'name tasks')
+
+    // {
+    //   $or: [
+    //     {"tasks.translator.workers": ObjectId(
+    //     "64f1a2b3c4d5e6f7a8b9c0d5"
+    //   )},
+    //     {"tasks.cleaner.workers": ObjectId(
+    //     "64f1a2b3c4d5e6f7a8b9c0d5"
+    //   )},
+    //     {"tasks.typer.workers": ObjectId(
+    //     "64f1a2b3c4d5e6f7a8b9c0d5"
+    //   )}
+    //   ]
+    // }
+    $or: [
+      { "tasks.cleaner.workers": objectId },
+      { "tasks.typer.workers": objectId },
+      { "tasks.translator.workers": objectId },
+      { "tasks.editor.workers": objectId },
+    ]}, 'name tasks')
 }
 
 export const removeChapter = async(id) =>{

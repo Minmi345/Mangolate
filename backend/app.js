@@ -1,5 +1,4 @@
 import { app } from './src/express.js'
-import startDb from './src/model/connect.js'
 
 const port = process.env.PORT || 3000
 

@@ -1,7 +1,5 @@
-import { findUserByName, addUser } from '../model/user-model.js'
 import bcrypt from 'bcryptjs'
 import { User } from '../model/user-model.js'
-import mongoose, { Mongoose } from 'mongoose'
 import { getUsers as getUsersFromDb, updateRolesByName, removeUser, retrieveUsersByRoles } from '../model/user-model.js'
 
 export const getUser = async (req, res) => {

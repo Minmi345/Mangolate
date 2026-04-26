@@ -1,5 +1,5 @@
 import express from 'express'
-import {postChapter, getChapter, deleteChapter, deleteWorkerFromTask, putWorkerToTask, patchRoleStatus, getChaptersByUser} from '../controller/chapter-controller.js'
+import {postChapter, getChapter, deleteChapter, deleteWorkerFromTask, putWorkerToTask, patchRoleStatus} from '../controller/chapter-controller.js'
 
 export const router = express.Router()
 
