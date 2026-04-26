@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    /* Prevents the sidebar from squishing */
+    margin: 0 auto;
+    text-align: center;
+    border-right: 2px solid #F0C400;
+}
+
+.content {
+    flex-grow: 1;
+    /* Tells the content to take up all available space */
+    padding: 20px;
+}
+
+.Links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #777777;
+    width: 90%;
+    height: 2rem;
+    margin: 0.75rem auto;
+    border-radius: 10px;
+
+    &:hover {
+        color: #1A1A1A;
+        background-color: #FFFB90;
+    }
+}
+
+.Links.active {
+    background-color: #FFFB90;
+}
+
+.logo {
+    margin-right: auto;
+}
