@@ -21,6 +21,7 @@ display: grid;
     flex-grow: 1;
     /* Tells the content to take up all available space */
     padding: 20px;
+    margin: 2rem;
 }
 
 .Links {
