@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import bcrypt from 'bcryptjs'
 
 export default function SignPage() {
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
-    
-const [data, setData] = useState([])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("Logging in with:", { user, password })
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        const [data, setData] = useState([])
         useEffect(() => {
             fetch('http://localhost:3001/users')
                 .then((res) => res.json())
                 .then((json) => setData(json))
         }, [])
-    const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Logging in with:", { user, password });
-    console.log(data)
-}
+
+        console.log(data)
+    }
 
     return (
         <>
@@ -41,7 +45,7 @@ const [data, setData] = useState([])
                 </div>
                 <button type="submit" className="login-button">Sign In</button>
             </form>
-            
+
         </>
     )
 }

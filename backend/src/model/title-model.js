@@ -36,6 +36,9 @@ export const Title = mongoose.model('Title', titleSchema, 'Titles')
 export const addTitle = async (json) =>{
   return await Title.save(json)
 }
+export const retrieveTitles = async () => {
+  return await Title.find()
+}
 
 export const findTitle = async(id) =>{
   return await Title.findOne({_id:id},'name')

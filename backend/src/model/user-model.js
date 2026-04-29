@@ -2,18 +2,18 @@ import { dbClient } from './connect.js'
 import mongoose from 'mongoose'
 
 const userSchema = new mongoose.Schema({
-  name: { 
-    type: String, 
-    required: true, 
+  name: {
+    type: String,
+    required: true,
     unique: true // Prevents duplicate usernames
   },
-  hashed_password: { 
-    type: String, 
-    required: true 
+  hashed_password: {
+    type: String,
+    required: true
   },
-  roles: { 
+  roles: {
     type: [String], // Array of strings
-    default: [] 
+    default: []
   }
 })
 
@@ -29,12 +29,12 @@ export const getUsers = async () => {
   return await User.find()
 }
 
-export const addUser = async (json) =>{
+export const addUser = async (json) => {
   return await userCollection.insertOne(json)
 }
 
 export const removeUser = async (name) => {
-  return await userCollection.deleteOne({name})
+  return await userCollection.deleteOne({ name })
 }
 
 export const updateRolesByName = async (name, newRoles) => {
@@ -46,9 +46,15 @@ export const updateRolesByName = async (name, newRoles) => {
   )
 }
 
-export const retrieveUsersByRoles = async (roles) =>{
+export const retrieveUsersByRoles = async (roles) => {
   //return await User.find({ roles: { $in: roles } });
   return await User.find(
-    { roles: { $in: roles } }, 
+    { roles: { $in: roles } },
     'name -_id')
+}
+
+export const checkUserPassword = async (user, password) => {
+  return await User.find(
+    {name: user, hashed_password: password}
+  )
 }

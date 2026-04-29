@@ -16,7 +16,7 @@ import Useful from './Useful'
 export default function HomePage() {
     return (
         <>
-            <div class="container">
+            <div className="container">
                 <Sidebar />
 
             </div>
@@ -61,7 +61,7 @@ export function Sidebar() {
 export function Logo() {
     return (
         <>
-            <img src={logo} alt="logo" width="150px" class="logo"></img>
+            <img src={logo} alt="logo" width="150px" className="logo"></img>
         </>
     )
 }

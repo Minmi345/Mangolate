@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { User } from '../model/user-model.js'
-import { getUsers as getUsersFromDb, updateRolesByName, removeUser, retrieveUsersByRoles } from '../model/user-model.js'
+import { getUsers as getUsersFromDb, updateRolesByName,checkUserPassword, removeUser, retrieveUsersByRoles } from '../model/user-model.js'
 
 export const getUser = async (req, res) => {
   try {
@@ -69,9 +69,9 @@ export const patchUserRoles = async (req, res) => {
     const { roles } = req.body
 
     // Validation: check if roles is actually an array
-    if (!Array.isArray(roles)) {
-      return res.status(400).json({ message: "Roles must be an array of strings" })
-    }
+    // if (!Array.isArray(roles)) {
+    //   return res.status(400).json({ message: "Roles must be an array of strings" })
+    // }
 
     const updatedUser = await updateRolesByName(username, roles)
 
@@ -98,12 +98,24 @@ export const getUsersByRoles = async (req, res) => {
 
     const users = await retrieveUsersByRoles(roles)
     console.log("Im here!")
-    
-    if (!users){
+
+    if (!users) {
       return res.status(404).json({ message: "Users with this specific role were not found" })
     }
     res.json(users)
 
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+export const verifyUser = async (req, res) => {
+  try {
+    const user = req.params.user
+    const password = req.query.password
+
+    checkUserPassword(user, password)
   }
   catch (error) {
     res.status(400).json({ error: error.message })

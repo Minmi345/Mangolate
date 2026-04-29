@@ -1,4 +1,4 @@
-import { Title, addTitle, findTitle, removeTitle } from '../model/title-model.js'
+import { Title, addTitle, findTitle, removeTitle, retrieveTitles } from '../model/title-model.js'
 
 // get 1 title ✅
 // create title (with usual roles in it) ✅
@@ -14,6 +14,18 @@ export const postTitle = async (req, res) => {
     const newTitle = new Title(req.body)
     await addTitle
     res.status(201).json(newTitle)
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+export const getTitles = async (req, res) => {
+  try {
+    const titles = await retrieveTitles()
+    if (!titles) return res.status(404).json({ message: "The collection of titles is empty" })
+
+    res.json(titles)
   }
   catch (error) {
     res.status(400).json({ error: error.message })
