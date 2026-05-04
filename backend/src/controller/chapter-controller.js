@@ -1,4 +1,4 @@
-import { Chapter, addChapter, findChapter, removeChapter, removeWorkerFromTask, addWorkerToTask, editRoleStatus, findChaptersByUser} from '../model/chapter-model.js'
+import { Chapter, findChaptersByTitle, addChapter, findChapter, retrieveChapters, removeChapter, removeWorkerFromTask, addWorkerToTask, editRoleStatus, findChaptersByUser} from '../model/chapter-model.js'
 // create 1 chapter
 // delete 1 chapter
 //retrieve 1 chapter
@@ -30,11 +30,35 @@ export const getChapter = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 }
+
+export const getChapters = async (req, res) => {
+  try {
+    const titles = await retrieveChapters()
+    if (!titles) return res.status(404).json({ message: "The collection of titles is empty" })
+
+    res.json(titles)
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 export const getChaptersByUser = async (req, res) => {
   try {
     const id = req.params.id
     const chapters = await findChaptersByUser(id)
     if (!chapters || chapters.length === 0) res.status(404).json({ message: "User doesn't have any chapters connected to them" })
+    res.json(chapters)
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+export const getChaptersByTitle = async (req, res) => {
+  try {
+    const name = req.params.name
+    const chapters = await findChaptersByTitle(name)
+    if (!chapters || chapters.length === 0) res.status(404).json({ message: "Can't find any chapters with such title" })
     res.json(chapters)
   }
   catch (error) {

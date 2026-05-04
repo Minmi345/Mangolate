@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import {Title} from './title-model.js'
 
 // get chapters where USER is and status is (!done)
 // get chapters by title
@@ -55,74 +56,106 @@ const chapterSchema = new mongoose.Schema({
 // Export the Model
 export const Chapter = mongoose.model('Chapter', chapterSchema, 'Chapters')
 
-export const addChapter = async (json) =>{
-  const  newChapter = new Chapter(json)
+export const addChapter = async (json) => {
+  await Chapter.findOneAndUpdate
+  const newChapter = new Chapter(json)
   return newChapter.save()
 }
 
-export const findChapter = async(id) =>{
-  return await Chapter.findOne({_id:id},'name')
+export const findChapter = async (id) => {
+  return await Chapter.findOne({ _id: id }, 'name')
 }
 
-//chapter 1
-// clean : Vika
-// type : Htoss
-// translate: Htoss
-export const findChaptersByUser = async(userId) =>{
+export const retrieveChapters = async () => {
+  return await Chapter.find()
+}
+
+export const findChaptersByTitle = async (titleName) => {
+  const title = await Title.findOne({ name: titleName })
+  if (!title) return []
+
+  return await Chapter.find({ titleId: title._id })
+}
+
+export const findChaptersByUser = async (userId) => {
   const objectId = new mongoose.Types.ObjectId(userId)
-  // return await Chapter.find({"tasks.$*.workers": {$in:objectId}},'name tasks')
-  return await Chapter.find({
-    //   "tasks": {
-    //     $elemMatch : { "workers": objectId}
-    //   }
-    //  }, 'name tasks')
-
-    // {
-    //   $or: [
-    //     {"tasks.translator.workers": ObjectId(
-    //     "64f1a2b3c4d5e6f7a8b9c0d5"
-    //   )},
-    //     {"tasks.cleaner.workers": ObjectId(
-    //     "64f1a2b3c4d5e6f7a8b9c0d5"
-    //   )},
-    //     {"tasks.typer.workers": ObjectId(
-    //     "64f1a2b3c4d5e6f7a8b9c0d5"
-    //   )}
-    //   ]
-    // }
-    $or: [
-      { "tasks.cleaner.workers": objectId },
-      { "tasks.typer.workers": objectId },
-      { "tasks.translator.workers": objectId },
-      { "tasks.editor.workers": objectId },
-    ]}, 'name tasks')
+  return await Chapter.aggregate([
+    //Filter documents where the user exists in any role
+    {
+      $match: {
+        $or: [
+          { "tasks.cleaner.workers": objectId },
+          { "tasks.typer.workers": objectId },
+          { "tasks.translator.workers": objectId },
+          { "tasks.editor.workers": objectId }
+        ]
+      }
+    },
+    {
+      // Look up name, returns an array
+      $lookup: {
+        from: "Titles",
+        localField: "titleId",
+        foreignField: "_id",
+        as: "titleData"
+      }
+    },
+    //dearray $lookup
+    //from the mongodb docs:
+    //Deconstructs an array field from the input documents to output a document for each element. 
+    // Each output document is the input document with the value of the array field replaced by the element.
+    { $unwind: "$titleData" },
+    //create an obj that we return
+    {
+      $project: {
+        titleName: "$titleData.name",
+        chapterName: "$name",
+        // ["k":"cleaner", "v":{data}]
+        taskArray: { $objectToArray: "$tasks" }
+      }
+    },
+    //unpack weird array we made (we made duplicates with chapters as well)
+    { $unwind: "$taskArray" },
+    // //filter it through again
+    { $match: { "taskArray.v.workers": objectId } },
+    {
+      $project: {
+        _id: 0,
+        titleName: 1,
+        chapterName: 1,
+        role: "$taskArray.k",
+        deadline: "$taskArray.v.deadline",
+        status: "$taskArray.v.status"
+      }
+    }
+  ])
 }
 
-export const removeChapter = async(id) =>{
-  return await Chapter.deleteOne({_id: id})
+export const removeChapter = async (id) => {
+  return await Chapter.deleteOne({ _id: id })
 }
 
-export const removeWorkerFromTask = async(chapterId, role, userId) =>{
+export const removeWorkerFromTask = async (chapterId, role, userId) => {
   const updateKey = `tasks.${role}.workers` //dynamic key for the map
   return await Chapter.findByIdAndUpdate(
     chapterId,
-    { $pull: { [updateKey]: userId } }, 
+    { $pull: { [updateKey]: userId } },
     { new: true }
   )
 }
-export const addWorkerToTask = async(chapterId, role, userId) =>{
+export const addWorkerToTask = async (chapterId, role, userId) => {
   const updateKey = `tasks.${role}.workers`
   return await Chapter.findByIdAndUpdate(
     chapterId,
-    { $addToSet: { [updateKey]: userId } }, 
+    { $addToSet: { [updateKey]: userId } },
     { new: true }
   ).populate('tasks.$*.workers', 'name') //MongoDB's "join"
 }
-export const editRoleStatus = async(chapterId, role, status) =>{
+export const editRoleStatus = async (chapterId, role, status) => {
   const updateKey = `tasks.${role}.status`
   return await Chapter.findByIdAndUpdate(
     chapterId,
-    { $set: { [updateKey]: status } }, 
+    { $set: { [updateKey]: status } },
     { new: true })
 
 }

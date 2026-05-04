@@ -40,7 +40,7 @@ export function Sidebar() {
                         <NavLink className="Links" to="/"> <Icon src={deadline}/>Home</NavLink> {" "}
                         <NavLink className="Links" to="/Useful"><Icon src={useful}/>Useful info</NavLink> {" "}
                         <NavLink className="Links" to="/SignUpPage"><Icon src={profile}/>Sign Up/ Log In Page</NavLink> {" "}
-                        <NavLink className="Links" to="/liam"><Icon src={favourite}/>Liam</NavLink> {" "}
+                        {/* <NavLink className="Links" to="/liam"><Icon src={favourite}/>Liam</NavLink> {" "} */}
                         <NavLink className="Links" to="/sillyPage"><Icon src={warning}/>Silly Page</NavLink> {" "}
 
                     </nav>
