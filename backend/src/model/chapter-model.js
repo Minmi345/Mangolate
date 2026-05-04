@@ -6,8 +6,7 @@ import {Title} from './title-model.js'
 
 const taskSchema = new mongoose.Schema({
   workers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     default: [],
     required: false
   }],
@@ -56,8 +55,11 @@ const chapterSchema = new mongoose.Schema({
 // Export the Model
 export const Chapter = mongoose.model('Chapter', chapterSchema, 'Chapters')
 
-export const addChapter = async (json) => {
-  await Chapter.findOneAndUpdate
+export const addChapter = async (json, name, titleId) => {
+  
+  const existing = await Chapter.findOne({ name: name, titleId: titleId })
+  if (existing) throw new Error("Chapter already exists for this title")
+
   const newChapter = new Chapter(json)
   return newChapter.save()
 }

@@ -11,7 +11,8 @@ import { Chapter, findChaptersByTitle, addChapter, findChapter, retrieveChapters
 export const postChapter = async (req, res) => {
   try {
     const newChapter = new Chapter(req.body)
-    await addChapter(newChapter)
+    const {name, titleId} = req.body
+    await addChapter(newChapter, name, titleId)
     res.status(201).json(newChapter)
   }
   catch (error) {
