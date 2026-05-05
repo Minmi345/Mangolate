@@ -156,10 +156,10 @@ function PensioneerTable() {
             .then((res) => res.json())
             .then((json) => setData(json))
             .catch(err => console.error("Error fetching:", err))
-        
+
         fetchData()
-        const refresh = setInterval(fetchData,5000)
-        return () =>{
+        const refresh = setInterval(fetchData, 10000)
+        return () => {
             clearInterval(refresh)
             console.log("Memory was cleaned, I promise!")
         }
@@ -325,44 +325,22 @@ function TitleFormCreate() {
 }
 
 function TitleFormPatch() {
-    function formatDDMMYYYY(d) {
-        const dd = String(d.getDate()).padStart(2, '0');
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const yyyy = d.getFullYear();
-        return `${dd}.${mm}.${yyyy}`;
-    }
-    let today = new Date()
-    let plus7 = new Date(today);
-    plus7.setDate(plus7.getDate() + 7);
-
-
     const [chapter, setChapter] = useState("Chapter 1: How it all started")
-    const [cleaner, setCleaner] = useState("Hex")
-    const [typer, setTyper] = useState("Htoss")
-    const [editor, setEditor] = useState("Htoss")
-    const [translator, setTranslator] = useState("Kji")
-    const [deadline, setDeadline] = useState(formatDDMMYYYY(plus7))
+    const [isPublished, setIsPublished] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log("Having this funny things:", { chapter, cleaner, typer, editor, deadline })
+        console.log("Having this funny things:", { chapter, isPublished })
         let data
-        let parseddate = new Date(deadline)
         const payload = {
             name: chapter,
-            isPublished: false,
-            titleId: "69f0886dfdae3c6adf53c903",
-            tasks: {
-                cleaner: { workers: [cleaner], deadline: parseddate, status: "Not Started" },
-                typer: { workers: [typer], deadline: parseddate, status: "Not Started" },
-                translator: { workers: [translator], deadline: parseddate, status: "Not Started" },
-                editor: { workers: [editor], deadline: parseddate, status: "Not Started" }
-            }
+            isPublished: isPublished,
+            titleId: "69f0886dfdae3c6adf53c903"
         }
         console.log({ payload })
 
-        fetch('http://localhost:3001/chapters', {
-            method: 'POST', // Specify the method
+        fetch('http://localhost:3001/chapters/publish', {
+            method: 'PATCH', // Specify the method
             headers: {
                 'Content-Type': 'application/json', // Tell the server to expect JSON
             },
@@ -389,46 +367,13 @@ function TitleFormPatch() {
                     />
                 </div>
                 <div className="input-group">
-                    <label>Cleaner</label>
-                    <input
-                        value={cleaner}
-                        onChange={(e) => setCleaner(e.target.value)}
-                        required
-                    />
+                    <label><input
+                        type="checkbox"
+                        checked={isPublished}
+                        onChange={(e) => setIsPublished(e.target.checked)}
+                    />Publish?</label>
                 </div>
-                <div className="input-group">
-                    <label>Translator</label>
-                    <input
-                        value={translator}
-                        onChange={(e) => setTranslator(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <label>Typer</label>
-                    <input
-                        value={typer}
-                        onChange={(e) => setTyper(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <label>Editor</label>
-                    <input
-                        value={editor}
-                        onChange={(e) => setEditor(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <label>Deadline</label>
-                    <input
-                        value={deadline}
-                        onChange={(e) => setDeadline(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="login-button">Create</button>
+                <button type="submit" className="login-button">Change</button>
             </form>
 
         </>
@@ -437,19 +382,19 @@ function TitleFormPatch() {
 
 function TitleFormDelete() {
     const [chapter, setChapter] = useState("Chapter 1: How it all started")
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault()
-        // console.log("Having this funny things:", { chapter, cleaner, typer, editor, deadline })
+        // console.log("Having this funny things:", { name })
         let data
         const payload = {
             name: chapter,
-            titleId: "69f0886dfdae3c6adf53c903"
+            titleName: "69f0886dfdae3c6adf53c903"
         }
         console.log({ payload })
 
         fetch('http://localhost:3001/chapters', {
-            method: 'POST', // Specify the method
+            method: 'DELETE', // Specify the method
             headers: {
                 'Content-Type': 'application/json', // Tell the server to expect JSON
             },

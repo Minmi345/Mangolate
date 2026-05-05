@@ -1,4 +1,4 @@
-import { Chapter, findChaptersByTitle, addChapter, findChapter, retrieveChapters, removeChapter, removeWorkerFromTask, addWorkerToTask, editRoleStatus, findChaptersByUser} from '../model/chapter-model.js'
+import { Chapter, findChaptersByTitle,changePublish, addChapter, findChapter, retrieveChapters, removeChapter, removeWorkerFromTask, addWorkerToTask, editRoleStatus, findChaptersByUser} from '../model/chapter-model.js'
 // create 1 chapter
 // delete 1 chapter
 //retrieve 1 chapter
@@ -69,8 +69,10 @@ export const getChaptersByTitle = async (req, res) => {
 
 export const deleteChapter = async (req, res) => {
   try {
-    const id = req.params.id
-    const result = await removeChapter(id)
+    const {name, titleName} = req.body
+    console.log(name)
+    console.log(titleName)
+    const result = await removeChapter(name,titleName)
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Chapter not found" })
     }
@@ -130,6 +132,35 @@ export const patchRoleStatus = async (req, res) => {
       message: `Now status is ${status}`,
       chapter: updatedChapter
     })
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+export const patchPublish = async (req, res) =>{
+  try{
+    const { name, titleId, isPublished } = req.body
+    // 1. Validate input
+    if (!name || !titleId) {
+      return res.status(400).json({ error: "Missing name or titleId" });
+    }
+
+    const result = await changePublish(name, titleId, isPublished);
+
+    // 2. Check if a document was found
+    if (result && result.matchedCount > 0) {
+      return res.status(200).json({ 
+        message: "Update successful", 
+        details: result 
+      });
+    }
+
+    // 3. If matchedCount is 0, it means the query found nothing
+    return res.status(404).json({ 
+      error: "No chapter found matching those criteria",
+      received: { name, titleId }
+    });  
   }
   catch (error) {
     res.status(400).json({ error: error.message })

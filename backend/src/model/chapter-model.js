@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import {Title} from './title-model.js'
+import { Title } from './title-model.js'
 
 // get chapters where USER is and status is (!done)
 // get chapters by title
@@ -56,7 +56,7 @@ const chapterSchema = new mongoose.Schema({
 export const Chapter = mongoose.model('Chapter', chapterSchema, 'Chapters')
 
 export const addChapter = async (json, name, titleId) => {
-  
+
   const existing = await Chapter.findOne({ name: name, titleId: titleId })
   if (existing) throw new Error("Chapter already exists for this title")
 
@@ -133,8 +133,11 @@ export const findChaptersByUser = async (userId) => {
   ])
 }
 
-export const removeChapter = async (id) => {
-  return await Chapter.deleteOne({ _id: id })
+export const removeChapter = async (name, titleId) => {
+  return await Chapter.deleteOne({
+    name: name,
+    titleId: titleId
+  })
 }
 
 export const removeWorkerFromTask = async (chapterId, role, userId) => {
@@ -160,4 +163,14 @@ export const editRoleStatus = async (chapterId, role, status) => {
     { $set: { [updateKey]: status } },
     { new: true })
 
+}
+
+export const changePublish = async (name, titleId, isPublished) => {
+  return await Chapter.updateOne({
+    name: name,
+    titleId: titleId
+  },
+  {
+    isPublished: isPublished
+  })
 }
