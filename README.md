@@ -6,12 +6,15 @@ Nowadays people that have a hobby of translating manga do not have specific way 
 ## Prerequisites
 - node.js
 - npm
-- no database (for now)
+- MongoDb
 
 ## installation
 
 When you install repo, try to run a command in **root** folder:
 > npm run install-all
+
+In case it doesn't work run in **root**,**backend**, and **frontend** folder:
+> npm install
 
 Also add **dotenv** file to backend folder and write inside **PORT=3000** and **MONGODBURI=xxx** 
 
@@ -32,6 +35,3 @@ To run frontend:
 To run eslint (done from frontend or backend folder):
 
 > npm run eslint
-
-## PreCommit rules
-Before commiting, do not forget to run eslint! 
