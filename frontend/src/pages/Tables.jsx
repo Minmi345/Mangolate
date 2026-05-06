@@ -6,7 +6,6 @@ export default function PageTable() {
         <>
             <UserTable />
             <TitleTable />
-            <ChapterByUserTable />
             < PensioneerTable />
             <TitleFormCreate />
             <TitleFormDelete />
@@ -84,56 +83,6 @@ function TitleTable() {
                     <tr>
                         <th>Name</th>
                         <th>Id</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-                    {DisplayDataForTable}
-                </tbody>
-            </table>
-        </>
-    )
-}
-function ChapterByUserTable() {
-
-    const [data, setData] = useState([])
-    useEffect(() => {
-        fetch('http://localhost:3001/users/69ea7bec48811209d2eb383f/chapters')
-            .then((res) => res.json())
-            .then((json) => setData(json))
-    }, [])
-    const DisplayDataForTable = data.map(
-        (info) => {
-            const time = new Intl.DateTimeFormat('de-DE', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }).format(new Date(info.deadline))
-            return (
-                <tr>
-                    <td><b>{info.titleName}</b></td>
-                    <td>{info.chapterName}</td>
-                    <td>{info.role}</td>
-                    <td>{time}</td>
-                    <td>{info.status}</td>
-                    {/* <td>{info._id}</td> */}
-                </tr>
-            )
-        }
-    )
-    return (
-        <>
-            <h2>Chapter by user</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Chapter</th>
-                        <th>Role</th>
-                        <th>Deadline</th>
-                        <th>Status</th>
-                        {/* <th>Id</th> */}
                     </tr>
 
                 </thead>

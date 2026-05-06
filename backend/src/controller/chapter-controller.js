@@ -141,26 +141,23 @@ export const patchRoleStatus = async (req, res) => {
 export const patchPublish = async (req, res) =>{
   try{
     const { name, titleId, isPublished } = req.body
-    // 1. Validate input
+    // Validate input
     if (!name || !titleId) {
-      return res.status(400).json({ error: "Missing name or titleId" });
+      return res.status(400).json({ error: "Missing name or titleId" })
     }
-
-    const result = await changePublish(name, titleId, isPublished);
-
-    // 2. Check if a document was found
+    const result = await changePublish(name, titleId, isPublished)
+    // if a document is found
     if (result && result.matchedCount > 0) {
       return res.status(200).json({ 
         message: "Update successful", 
         details: result 
-      });
+      })
     }
-
-    // 3. If matchedCount is 0, it means the query found nothing
+    // If matchedCount is 0 = nothing
     return res.status(404).json({ 
       error: "No chapter found matching those criteria",
       received: { name, titleId }
-    });  
+    })
   }
   catch (error) {
     res.status(400).json({ error: error.message })

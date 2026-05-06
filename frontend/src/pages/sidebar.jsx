@@ -1,6 +1,6 @@
 import logo from '../assets/logo.svg'
 import useful from '../assets/tasks/useful.svg'
-import favourite from '../assets/tasks/favorite.svg'
+// import favourite from '../assets/tasks/favorite.svg'
 import projects from '../assets/tasks/projects.svg'
 import profile from '../assets/profile.svg'
 import deadline from '../assets/tasks/deadline.svg'
@@ -12,6 +12,7 @@ import PageTable from './Tables'
 import { BrowserRouter, Routes, Route, NavLink, Link } from 'react-router-dom'
 import { SillyPage } from './SillyPage'
 import Useful from './Useful'
+import Home from './homepage'
 
 export default function HomePage() {
     return (
@@ -37,7 +38,7 @@ export function Sidebar() {
                     <nav className="sidebar">
                         <Logo />
                         <NavLink className="Links" to="/Table"><Icon src={projects}/>See some cool table</NavLink> {" "}
-                        <NavLink className="Links" to="/"> <Icon src={deadline}/>Home</NavLink> {" "}
+                        <NavLink className="Links" to="/home"> <Icon src={deadline}/>Home</NavLink> {" "}
                         <NavLink className="Links" to="/Useful"><Icon src={useful}/>Useful info</NavLink> {" "}
                         <NavLink className="Links" to="/SignUpPage"><Icon src={profile}/>Sign Up/ Log In Page</NavLink> {" "}
                         {/* <NavLink className="Links" to="/liam"><Icon src={favourite}/>Liam</NavLink> {" "} */}
@@ -51,6 +52,7 @@ export function Sidebar() {
                         <Route path="/SignUpPage" element={<SignPage />} />
                         <Route path="/Useful" element={<Useful />} />
                         <Route path="/Table" element={<PageTable />} />
+                        <Route path="/home" element={<Home />} />
                     </Routes>
 </main>
                 </BrowserRouter>

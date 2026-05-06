@@ -170,7 +170,5 @@ export const changePublish = async (name, titleId, isPublished) => {
     name: name,
     titleId: titleId
   },
-  {
-    isPublished: isPublished
-  })
+  { isPublished: isPublished })
 }
